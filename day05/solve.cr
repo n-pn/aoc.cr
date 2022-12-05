@@ -1,9 +1,8 @@
 def solve(input : String, part1 = true)
   layout, moves = input.split("\n\n")
   layout = layout.split("\n").tap(&.pop)
-  size = (layout.first.size + 1) // 4
 
-  boxes = (0..size - 1).map do |i|
+  boxes = (0..layout.first.size // 4).map do |i|
     layout.reverse_each.with_object([] of Char) do |line, list|
       line[i * 4 + 1].tap { |c| list << c unless c == ' ' }
     end
@@ -11,15 +10,8 @@ def solve(input : String, part1 = true)
 
   moves.each_line do |line|
     a, b, c = line.split(/\D+/, remove_empty: true).map(&.to_i)
-    x = boxes[b - 1]
-
-    if part1
-      a.times { boxes[c - 1] << x.pop }
-    else
-      m = [] of Char
-      a.times { m.unshift(x.pop) }
-      boxes[c - 1].concat(m)
-    end
+    t = (0...a).map { boxes[b - 1].pop }
+    boxes[c - 1].concat part1 ? t : t.reverse!
   end
 
   boxes.map(&.last).join
