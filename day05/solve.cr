@@ -4,14 +4,13 @@ def solve(input : String, part1 = true)
 
   boxes = (0..layout.first.size // 4).map do |i|
     layout.reverse_each.with_object([] of Char) do |line, list|
-      line[i * 4 + 1].tap { |c| list << c unless c == ' ' }
+      line[i * 4 + 1].tap { |c| list << c if c != ' ' }
     end
   end
 
   moves.each_line do |line|
     a, b, c = line.split(/\D+/, remove_empty: true).map(&.to_i)
-    t = (0...a).map { boxes[b - 1].pop }
-    boxes[c - 1].concat part1 ? t : t.reverse!
+    boxes[c - 1].concat boxes[b - 1].pop(a).tap { |x| x.reverse! if part1 }
   end
 
   boxes.map(&.last).join
