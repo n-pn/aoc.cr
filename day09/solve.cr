@@ -6,10 +6,10 @@ alias Pos = Tuple(Int32, Int32)
 p1, p2 = Set(Pos).new, Set(Pos).new
 
 rope = Array(Pos).new(10, {0, 0})
-moves = {'R' => {1, 0}, 'L' => {-1, 0}, 'U' => {0, -1}, 'D' => {0, 1}}
+DIRS = {'R' => {1, 0}, 'L' => {-1, 0}, 'U' => {0, -1}, 'D' => {0, 1}}
 
 input.each_line do |line|
-  mx, my = moves[line[0]]
+  mx, my = DIRS[line[0]]
   line[2..].to_i.times do
     rope.map_with_index! do |(tx, ty), i|
       next {tx + mx, ty + my} if i == 0
