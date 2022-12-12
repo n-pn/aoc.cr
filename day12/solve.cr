@@ -31,9 +31,7 @@ def solve(map, queue, reach = 'S')
   end
 end
 
-map = input.lines.map { |x| ['.'].concat(x.chars).tap(&.push('.')) }
-map.unshift Array(Char).new(map.first.size, '.')
-map << Array(Char).new(map.first.size, '.')
+map = input.lines.map(&.chars.<< '.').tap { |x| x << Array.new(x[0].size, '.') }
 
 s_x = map.index!(&.includes?('E'))
 s_y = map[s_x].index!('E')
