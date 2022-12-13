@@ -5,6 +5,20 @@ class Arr
   @arr = [] of Arr | Int32
   forward_missing_to @arr
 
+  include Comparable(Int32 | Arr)
+
+  def <=>(other : Arr | Int32)
+    other = Arr.from(other) if other.is_a?(Int32)
+
+    each_with_index do |a, i|
+      return 1 unless b = other[i]?
+      c = a <=> b
+      return c unless c == 0
+    end
+
+    size <=> other.size
+  end
+
   def self.from(x : Int32)
     new.tap(&.<< x)
   end
@@ -34,28 +48,20 @@ class Arr
   end
 end
 
-def cmp(l, r) : Int32
-  case {l, r}
-  in {Int32, Int32} then return l <=> r
-  in {Int32, Arr}   then l = Arr.from(l)
-  in {Arr, Int32}   then r = Arr.from(r)
-  in {Arr, Arr}
-  end
+struct Int32
+  include Comparable(Arr)
 
-  l.each_with_index do |a, i|
-    return 1 unless b = r[i]?
-    cmp(a, b).try { |c| return c unless c == 0 }
+  def <=>(other : Arr)
+    Arr.from(self) <=> other
   end
-
-  l.size <=> r.size
 end
 
 packets = input.lines.reject!(&.empty?).map { |x| Arr.parse(x) }
-p1 = packets.each_slice(2).with_index(1).sum { |(a, b), i| cmp(a, b) < 1 ? i : 0 }
+p1 = packets.each_slice(2).with_index(1).sum { |(a, b), i| a <= b ? i : 0 }
 
 two, six = Arr.parse("[[2]]"), Arr.parse("[[6]]")
 packets << two << six
-packets.sort! { |a, b| cmp(a, b) }
+packets.sort!
 
-p2 = {two, six}.product { |x| packets.index! { |y| cmp(x, y) == 0 } + 1 }
+p2 = {two, six}.product { |x| packets.index!(x) + 1 }
 puts p1, p2
