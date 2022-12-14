@@ -1,26 +1,18 @@
 input = File.read("day14/test0.txt").strip
 input = File.read("day14/input.txt").strip
 
-def solve(map, bottom, count_bottom = false)
+def solve(map, ymax, part2 = false)
   (0..).each do |n|
     x, y = 500, 0
     return n if map.includes?({x, y})
 
-    while !map.includes?({x, y})
-      if y == bottom
-        return n unless count_bottom
-        map << {x, y}
-        break
-      end
-
-      y += 1
-
-      if i = {0, -1, 1}.find { |a| !{x + a, y}.in? map }
-        x += i
-      else
-        map << {x, y - 1}
-      end
+    blocked = while y < ymax
+      break part2 if y + 1 == ymax
+      x, y = { {x, y + 1}, {x - 1, y + 1}, {x + 1, y + 1} }.find(&.in?(map).!) || break true
     end
+
+    return n unless blocked
+    map << {x, y}
   end
 end
 
@@ -36,6 +28,6 @@ input.each_line do |line|
   }
 end
 
-bottom = map.max_of(&.[1])
-puts solve(map.clone, bottom, false)
-puts solve(map, bottom + 1, true)
+ymax = map.max_of(&.[1])
+puts solve(map.clone, ymax + 1, false)
+puts solve(map, ymax + 2, true)
