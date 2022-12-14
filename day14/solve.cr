@@ -1,18 +1,29 @@
 input = File.read("day14/test0.txt").strip
 input = File.read("day14/input.txt").strip
 
-def solve(map, ymax, part2 = false)
+def part1(map, ymax)
   (0..).each do |n|
     x, y = 500, 0
-    return n if map.includes?({x, y})
 
     blocked = while y < ymax
-      break part2 if y + 1 == ymax
       x, y = { {x, y + 1}, {x - 1, y + 1}, {x + 1, y + 1} }.find(&.in?(map).!) || break true
     end
 
     return n unless blocked
     map << {x, y}
+  end
+end
+
+def part2(map, ymax)
+  bfs = [{500, 0}]
+
+  bfs.each do |(x, y)|
+    return bfs.size if y == ymax
+
+    {0, 1, -1}.map { |i| {x + i, y + 1} }.each do |v|
+      bfs << v unless v.in?(map)
+      map << v
+    end
   end
 end
 
@@ -29,5 +40,5 @@ input.each_line do |line|
 end
 
 ymax = map.max_of(&.[1])
-puts solve(map.clone, ymax + 1, false)
-puts solve(map, ymax + 2, true)
+puts part1(map.clone, ymax)
+puts part2(map, ymax + 1)
