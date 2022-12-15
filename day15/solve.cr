@@ -1,19 +1,19 @@
-input = <<-TEST
-Sensor at x=2, y=18: closest beacon is at x=-2, y=15
-Sensor at x=9, y=16: closest beacon is at x=10, y=16
-Sensor at x=13, y=2: closest beacon is at x=15, y=3
-Sensor at x=12, y=14: closest beacon is at x=10, y=16
-Sensor at x=10, y=20: closest beacon is at x=10, y=16
-Sensor at x=14, y=17: closest beacon is at x=10, y=16
-Sensor at x=8, y=7: closest beacon is at x=2, y=10
-Sensor at x=2, y=0: closest beacon is at x=2, y=10
-Sensor at x=0, y=11: closest beacon is at x=2, y=10
-Sensor at x=20, y=14: closest beacon is at x=25, y=17
-Sensor at x=17, y=20: closest beacon is at x=21, y=22
-Sensor at x=16, y=7: closest beacon is at x=15, y=3
-Sensor at x=14, y=3: closest beacon is at x=15, y=3
-Sensor at x=20, y=1: closest beacon is at x=15, y=3
-TEST
+# input = <<-TEST
+# Sensor at x=2, y=18: closest beacon is at x=-2, y=15
+# Sensor at x=9, y=16: closest beacon is at x=10, y=16
+# Sensor at x=13, y=2: closest beacon is at x=15, y=3
+# Sensor at x=12, y=14: closest beacon is at x=10, y=16
+# Sensor at x=10, y=20: closest beacon is at x=10, y=16
+# Sensor at x=14, y=17: closest beacon is at x=10, y=16
+# Sensor at x=8, y=7: closest beacon is at x=2, y=10
+# Sensor at x=2, y=0: closest beacon is at x=2, y=10
+# Sensor at x=0, y=11: closest beacon is at x=2, y=10
+# Sensor at x=20, y=14: closest beacon is at x=25, y=17
+# Sensor at x=17, y=20: closest beacon is at x=21, y=22
+# Sensor at x=16, y=7: closest beacon is at x=15, y=3
+# Sensor at x=14, y=3: closest beacon is at x=15, y=3
+# Sensor at x=20, y=1: closest beacon is at x=15, y=3
+# TEST
 
 input = File.read("day15/input.txt").strip
 
@@ -44,8 +44,8 @@ def part1(sensors, beacons, y = 10)
   xmax - xmin - beacons[y].size + 1
 end
 
-def part2(sensors)
-  in_range = 0..4000000
+def part2(sensors, upper = 20)
+  in_range = 0..upper
 
   sensors.each do |sensor|
     sensor.d.times do |i|
@@ -62,4 +62,4 @@ def part2(sensors)
 end
 
 puts part1(sensors, beacons, 2000000)
-puts part2(sensors)
+puts part2(sensors, 4000000)
