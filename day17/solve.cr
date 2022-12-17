@@ -23,7 +23,7 @@ end
 # input = ">>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>".strip
 input = File.read("day17/input.txt").strip
 
-pushes = input.chars.map { |c| c == '<' ? -1 : 1 }
+pushes = input.chars.map(&.- '=') # { |c| c == '<' ? -1 : 1 }
 push_id = 0
 
 max_heights = [0]
@@ -54,9 +54,9 @@ cycle_data = nil
   max_height = {max_height, shape.max_of(&.// WIDTH) + 1}.max
   max_heights << max_height
 
-  next if cycle_data
+  next if cycle_data # no need to track if cycle already found
 
-  hash = "#{push_id}:#{index % 5}:#{top_rows(screen, max_height - 1)}"
+  hash = "#{push_id * 5 + index % 5}:#{top_rows(screen, max_height - 1)}"
 
   if prev = state_memos[hash]?
     cycle_data = {prev[0], index - prev[0], max_height - prev[1]}
