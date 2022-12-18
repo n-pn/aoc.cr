@@ -15,22 +15,14 @@ input = <<-TEST.strip
 TEST
 input = {{ read_file("day18/input.txt").strip }}
 
-DIRS = {
-  {-1, 0, 0}, {1, 0, 0},
-  {0, 1, 0}, {0, -1, 0},
-  {0, 0, 1}, {0, 0, -1},
-}
-
-CUBES = Hash(Int32, Hash(Int32, Hash(Int32, Int32))).new do |h, k|
-  h[k] = Hash(Int32, Hash(Int32, Int32)).new { |h2, k2| h2[k2] = Hash(Int32, Int32).new(0) }
-end
+CUBES = Hash({Int32, Int32, Int32}, Int32).new(0)
 
 xmin = ymin = zmin = Int32::MAX
 xmax = ymax = zmax = Int32::MIN
 
 input.each_line do |line|
   x, y, z = line.split(",").map(&.to_i)
-  CUBES[x][y][z] = 1
+  CUBES[{x, y, z}] = 1
 
   xmin = {xmin, x - 1}.min
   ymin = {ymin, y - 1}.min
@@ -41,31 +33,27 @@ input.each_line do |line|
   zmax = {zmax, z + 1}.max
 end
 
+NEIGS = {
+  {-1, 0, 0}, {1, 0, 0},
+  {0, 1, 0}, {0, -1, 0},
+  {0, 0, 1}, {0, 0, -1},
+}
+
 queue = [{xmin, ymin, zmin}]
 
-queue.each do |(x, y, z)|
-  next unless x.in?(xmin..xmax) && y.in?(xmin..zmax) && z.in?(zmin..zmax)
-
-  CUBES[x][y][z] ||= begin
-    DIRS.each { |(i, j, k)| queue << {x + i, y + j, z + k} }
-    -1
-  end
+queue.each do |q|
+  next if CUBES.has_key?(q)
+  next if q[0] < xmin || q[0] > xmax || q[1] < ymin || q[1] > ymax || q[2] < zmin || q[2] > zmax
+  NEIGS.each { |(i, j, k)| queue << {q[0] + i, q[1] + j, q[2] + k} }
+  CUBES[q] = -1
 end
 
 p1 = p2 = 0
 
-CUBES.each do |x, ymap|
-  ymap.each do |y, zmap|
-    zmap.each do |z, mask|
-      next unless mask == 1
-
-      DIRS.each do |(i, j, k)|
-        mx, my, mz = x + i, y + j, z + k
-        p1 += 1 if CUBES[mx][my][mz] != 1
-        p2 += 1 if CUBES[mx][my][mz] == -1
-      end
-    end
-  end
+CUBES.each do |c, m1|
+  next unless m1 == 1
+  p1 += NEIGS.count { |i, j, k| CUBES[{c[0] + i, c[1] + j, c[2] + k}] < 1 }
+  p2 += NEIGS.count { |i, j, k| CUBES[{c[0] + i, c[1] + j, c[2] + k}] < 0 }
 end
 
 puts p1, p2
