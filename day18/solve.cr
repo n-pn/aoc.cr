@@ -16,12 +16,9 @@ TEST
 input = {{ read_file("day18/input.txt").strip }}
 
 DIRS = {
-  {-1, 0, 0},
-  {1, 0, 0},
-  {0, 1, 0},
-  {0, -1, 0},
-  {0, 0, 1},
-  {0, 0, -1},
+  {-1, 0, 0}, {1, 0, 0},
+  {0, 1, 0}, {0, -1, 0},
+  {0, 0, 1}, {0, 0, -1},
 }
 
 CUBES = Hash(Int32, Hash(Int32, Hash(Int32, Int32))).new do |h, k|
@@ -35,42 +32,24 @@ input.each_line do |line|
   x, y, z = line.split(",").map(&.to_i)
   CUBES[x][y][z] = 1
 
-  xmin = x if xmin > x
-  ymin = y if ymin > y
-  zmin = z if zmin > z
+  xmin = {xmin, x - 1}.min
+  ymin = {ymin, y - 1}.min
+  zmin = {zmin, z - 1}.min
 
-  xmax = x if xmax < x
-  ymax = y if ymax < y
-  zmax = z if zmax < z
+  xmax = {xmax, x + 1}.max
+  ymax = {ymax, y + 1}.max
+  zmax = {zmax, z + 1}.max
 end
 
-queue = [] of {Int32, Int32, Int32}
-
-ymin.to(ymax) do |y|
-  zmin.to(zmax) do |z|
-    CUBES[xmin - 1][y][z] = CUBES[xmax + 1][y][z] = -1
-    queue << {xmin, y, z} << {xmax, y, z}
-  end
-end
-
-xmin.to(xmax) do |x|
-  zmin.to(zmax) do |z|
-    CUBES[x][ymin - 1][z] = CUBES[x][ymax + 1][z] = -1
-    queue << {x, ymin, z} << {x, ymax, z}
-  end
-end
-
-xmin.to(xmax) do |x|
-  ymin.to(ymax) do |y|
-    CUBES[x][y][zmin - 1] = CUBES[x][y][zmax + 1] = -1
-    queue << {x, y, zmin} << {x, y, zmax}
-  end
-end
+queue = [{xmin, ymin, zmin}]
 
 queue.each do |(x, y, z)|
-  next if CUBES[x][y][z] != 0
-  CUBES[x][y][z] = -1
-  DIRS.each { |(i, j, k)| queue << {x + i, y + j, z + k} }
+  next unless x.in?(xmin..xmax) && y.in?(xmin..zmax) && z.in?(zmin..zmax)
+
+  CUBES[x][y][z] ||= begin
+    DIRS.each { |(i, j, k)| queue << {x + i, y + j, z + k} }
+    -1
+  end
 end
 
 p1 = p2 = 0
