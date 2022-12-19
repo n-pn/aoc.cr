@@ -39,6 +39,8 @@ def max_geode(plan : Plan, max_time = 32)
     Int32::MAX,                            # max geoge robot
   }
 
+  max_geode_robots = 0
+
   max_time.times do
     new_queue = [] of {Quad, Quad}
 
@@ -48,6 +50,7 @@ def max_geode(plan : Plan, max_time = 32)
 
       # build geode robot
       if plan.can_build?(3, stored)
+        max_geode_robots = {max_geode_robots, robots[3] + 1}.max
         new_queue << plan.build_robot!(3, robots, stored)
         next
       end
@@ -73,7 +76,7 @@ def max_geode(plan : Plan, max_time = 32)
       new_queue << {robots, stored_2}
     end
 
-    queue = new_queue
+    queue = new_queue.reject! { |robots, _| robots[3] < max_geode_robots }
   end
 
   queue.max_of(&.[1][3])
