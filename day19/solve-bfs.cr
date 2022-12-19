@@ -48,35 +48,24 @@ def max_geode(plan : Plan, max_time = 32)
       next if seens.includes?({robots, stored})
       seens << {robots, stored}
 
-      # build geode robot
+      next if robots[3] < max_geode_robots
+
       if plan.can_build?(3, stored)
-        max_geode_robots = {max_geode_robots, robots[3] + 1}.max
+        max_geode_robots = robots[3] if max_geode_robots < robots[3]
         new_queue << plan.build_robot!(3, robots, stored)
         next
       end
 
-      # build obsidian robot
-      if robots[2] < robot_limits[2] && plan.can_build?(2, stored)
-        new_queue << plan.build_robot!(2, robots, stored)
-        next
+      can_skip = {2, 1, 0}.each do |type|
+        next unless robots[type] < robot_limits[type] && plan.can_build?(type, stored)
+        new_queue << plan.build_robot!(type, robots, stored)
+        break true if type == 2
       end
 
-      # build clay robot
-      if robots[1] < robot_limits[1] && plan.can_build?(1, stored)
-        new_queue << plan.build_robot!(1, robots, stored)
-      end
-
-      # build ore robot
-      if robots[0] < robot_limits[0] && plan.can_build?(0, stored)
-        new_queue << plan.build_robot!(0, robots, stored)
-      end
-
-      # do not build any robot
-      stored_2 = stored.map_with_index { |a, i| a + robots[i] }
-      new_queue << {robots, stored_2}
+      new_queue << {robots, stored.map_with_index { |a, i| a + robots[i] }} unless can_skip
     end
 
-    queue = new_queue.reject! { |robots, _| robots[3] < max_geode_robots }
+    queue = new_queue
   end
 
   queue.max_of(&.[1][3])
