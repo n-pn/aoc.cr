@@ -100,7 +100,7 @@ def max_geode(plan : Plan, limit = 32)
   seens = Hash(State, Int32).new
 
   ore_robot_limit = {plan.clay_robot_ore_cost, plan.obsidian_robot_ore_cost, plan.geode_robot_ore_cost}.max
-  clay_robot_limit = {plan.obsidian_robot_clay_cost, limit // 2 + 1}.min
+  clay_robot_limit = plan.obsidian_robot_clay_cost
 
   while entry = queue.pop?
     state, minute = entry
