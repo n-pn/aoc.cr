@@ -38,8 +38,8 @@ def solve_2(input, times = 1)
   {1000, 2000, 3000}.sum { |idx| input[indexes[(start + idx) % input.size]] }
 end
 
-# puts solve(input, 1)
-# puts solve(input.map(&.* 811589153), 10)
+puts solve(input, 1)
+puts solve(input.map(&.* 811589153), 10)
 
 puts solve_2(input, 1)
 puts solve_2(input.map(&.* 811589153), 10)
