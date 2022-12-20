@@ -43,7 +43,10 @@ def submit(year : Int32, day : Int32, answer : String, level : String)
   form = {"level" => level, "answer" => answer}
   link = "https://adventofcode.com/#{year}/day/#{day.to_i}/answer"
 
-  puts HTTP::Client.post(link, headers: headers, form: form).body
+  body = HTTP::Client.post(link, headers: headers, form: form).body
+
+  found = body.match(/<article>(.+)<\/article>/)
+  puts found.not_nil![1]
 end
 
 current = Time.local
@@ -66,6 +69,6 @@ when "init"
 when "input"
   fetch(year, day, out_dir)
 else
-  args.shift if args[0] == "submit"
+  args.shift if args[0].in?("submit", "answer")
   submit(year, day, args[0], args.fetch(1, "1"))
 end

@@ -21,6 +21,10 @@ class AOC
     File.read("#{@dir}/test#{id}.txt")
   end
 
+  def answer(answer, part = 1)
+    @@last_answer = {@year, @day, part, answer.to_s}
+  end
+
   private def read_input(ipath : String)
     File.read(ipath)
   rescue
