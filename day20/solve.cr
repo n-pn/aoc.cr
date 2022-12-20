@@ -1,19 +1,17 @@
 def solve(input, times)
-  lefts = Array.new(input.size) { |i| (i - 1) % input.size }
-  rights = Array.new(input.size) { |i| (i + 1) % input.size }
+  nexts = Array.new(input.size) { |i| (i + 1) % input.size }
 
   times.times do
     input.each_with_index do |value, index|
       next if value == 0
 
-      rights[lefts[index]] = rights[index]
-      lefts[rights[index]] = lefts[index]
+      left, right = index, nexts[index]
+      nexts[nexts.index!(&.== index)] = right
 
-      left, right = index, rights[index]
-      (value % (input.size - 1)).times { left, right = right, rights[right] }
+      (value % (input.size - 1)).times { left, right = right, nexts[right] }
 
-      rights[left] = lefts[right] = index
-      lefts[index], rights[index] = left, right
+      nexts[left] = index
+      nexts[index] = right
     end
   end
 
@@ -21,7 +19,7 @@ def solve(input, times)
 
   {1000, 2000, 3000}.sum do |idx|
     right = start
-    (idx % input.size).times { right = rights[right] }
+    (idx % input.size).times { right = nexts[right] }
     input[right]
   end
 end
