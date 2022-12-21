@@ -15,8 +15,8 @@ def solve(input : String, part1 = true)
   boxes.join(&.last)
 end
 
-puts solve(File.read("day05/test0.txt"), part1: true)
-puts solve(File.read("day05/input.txt"), part1: true)
+puts solve(File.read("2022/05/test0.txt"), part1: true)
+puts solve(File.read("2022/05/input.txt"), part1: true)
 
-puts solve(File.read("day05/test0.txt"), part1: false)
-puts solve(File.read("day05/input.txt"), part1: false)
+puts solve(File.read("2022/05/test0.txt"), part1: false)
+puts solve(File.read("2022/05/input.txt"), part1: false)

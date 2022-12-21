@@ -1,5 +1,5 @@
-# input = File.read("day12/test0.txt").strip
-input = File.read("day12/input.txt").strip
+# input = File.read("2022/12/test0.txt").strip
+input = File.read("2022/12/input.txt").strip
 
 def solve(map, queue, reach = 'S')
   steps = 0

@@ -1,5 +1,5 @@
-# input = File.read("day07/test0.txt").strip
-input = File.read("day07/input.txt").strip
+# input = File.read("2022/07/test0.txt").strip
+input = File.read("2022/07/input.txt").strip
 SIZES = [] of Int32
 
 def parse(input)

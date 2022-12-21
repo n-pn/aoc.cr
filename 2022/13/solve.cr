@@ -1,5 +1,5 @@
-# input = File.read("day13/test0.txt").strip
-input = File.read("day13/input.txt").strip
+# input = File.read("2022/13/test0.txt").strip
+input = File.read("2022/13/input.txt").strip
 
 class Arr
   @arr = [] of Arr | Int32

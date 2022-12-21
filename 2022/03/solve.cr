@@ -1,5 +1,5 @@
-# input = File.read("day03/test0.txt")
-input = File.read("day03/input.txt")
+# input = File.read("2022/03/test0.txt")
+input = File.read("2022/03/input.txt")
 
 input = input.lines.map { |l| l.chars.map { |c| c <= 'Z' ? c - 'A' + 27 : c - 'a' + 1 } }
 

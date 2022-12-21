@@ -20,8 +20,8 @@ def solve(input, times)
   {1000, 2000, 3000}.sum { |i| input[0.to(i % limit - 1).reduce(start) { |r, _| nexts[r] }] }
 end
 
-# input = {{ read_file("day20/test0.txt").strip }}.lines.map(&.to_i64)
-input = {{ read_file("day20/input.txt").strip }}.lines.map(&.to_i64)
+# input = {{ read_file("2022/20/test0.txt").strip }}.lines.map(&.to_i64)
+input = {{ read_file("2022/20/input.txt").strip }}.lines.map(&.to_i64)
 
 def solve_2(input, times = 1)
   indexes = (0...input.size).to_a

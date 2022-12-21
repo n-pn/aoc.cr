@@ -21,7 +21,7 @@ def top_rows(screen, height, rows = 25) # can be lower
 end
 
 # input = ">>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>".strip
-input = {{ read_file("day17/input.txt").strip }}
+input = {{ read_file("2022/17/input.txt").strip }}
 
 pushes = input.chars.map(&.- '=') # { |c| c == '<' ? -1 : 1 }
 push_id = 0

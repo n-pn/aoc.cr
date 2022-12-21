@@ -1,6 +1,6 @@
-# input = File.read("day09/test0.txt").strip
-# input = File.read("day09/test1.txt").strip
-input = File.read("day09/input.txt").strip
+# input = File.read("2022/09/test0.txt").strip
+# input = File.read("2022/09/test1.txt").strip
+input = File.read("2022/09/input.txt").strip
 
 alias Pos = Tuple(Int32, Int32)
 p1, p2 = Set(Pos).new, Set(Pos).new

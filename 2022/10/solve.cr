@@ -1,5 +1,5 @@
-# input = File.read("day10/test0.txt").strip
-input = File.read("day10/input.txt").strip
+# input = File.read("2022/10/test0.txt").strip
+input = File.read("2022/10/input.txt").strip
 
 values = input.each_line.with_object([1]) do |line, obj|
   obj << obj[-1]

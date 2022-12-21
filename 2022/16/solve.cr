@@ -11,7 +11,7 @@ Valve II has flow rate=0; tunnels lead to valves AA, JJ
 Valve JJ has flow rate=21; tunnel leads to valve II
 TEST
 
-input = File.read("day16/input.txt").strip
+input = File.read("2022/16/input.txt").strip
 
 COSTS = {} of UInt32 => Int32
 RATES = Array(Int32).new(60, 0)

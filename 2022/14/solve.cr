@@ -1,5 +1,5 @@
-input = File.read("day14/test0.txt").strip
-input = File.read("day14/input.txt").strip
+input = File.read("2022/14/test0.txt").strip
+input = File.read("2022/14/input.txt").strip
 
 def part1(map, ymax)
   (0..).each do |n|

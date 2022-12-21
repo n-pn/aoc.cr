@@ -1,5 +1,5 @@
 def total(type : String)
-  input = File.read("day01/#{type}.txt").strip
+  input = File.read("2022/01/#{type}.txt").strip
 
   input.split("\n\n").map do |x|
     x.split("\n").sum(&.to_i)

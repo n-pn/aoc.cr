@@ -20,8 +20,8 @@ class Monkey
   end
 end
 
-# input = File.read("day11/test0.txt").strip
-input = File.read("day11/input.txt").strip
+# input = File.read("2022/11/test0.txt").strip
+input = File.read("2022/11/input.txt").strip
 
 monkeys = input.split("\n\n").map { |x| Monkey.new(x) }
 mod = monkeys.product(&.test)

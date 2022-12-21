@@ -15,7 +15,7 @@
 # Sensor at x=20, y=1: closest beacon is at x=15, y=3
 # TEST
 
-input = File.read("day15/input.txt").strip
+input = File.read("2022/15/input.txt").strip
 
 record Sensor, x : Int32, y : Int32, d : Int32 do
   def reach?(a, b)

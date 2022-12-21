@@ -1,5 +1,5 @@
-# input = File.read("day02/test0.txt").strip
-input = File.read("day02/input.txt").strip
+# input = File.read("2022/02/test0.txt").strip
+input = File.read("2022/02/input.txt").strip
 
 puts input.each_line.reduce({0, 0}) { |(p1, p2), line|
   a, b = line[0] - 'A', line[2] - 'X'

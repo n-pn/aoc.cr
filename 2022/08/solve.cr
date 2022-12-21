@@ -1,5 +1,5 @@
-# input = File.read("day08/test0.txt").strip
-input = File.read("day08/input.txt").strip
+# input = File.read("2022/08/test0.txt").strip
+input = File.read("2022/08/input.txt").strip
 
 g1 = input.lines.map(&.chars)
 g2 = g1.transpose

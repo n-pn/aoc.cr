@@ -71,8 +71,8 @@ def max_geode(plan : Plan, max_time = 32)
   queue.max_of(&.[1][3])
 end
 
-# input = {{ read_file("day19/test0.txt").strip }}
-input = {{ read_file("day19/input.txt").strip }}
+# input = {{ read_file("2022/19/test0.txt").strip }}
+input = {{ read_file("2022/19/input.txt").strip }}
 
 plans = input.lines.map { |line| Plan.new(line.scan(/\d+/).map(&.[0].to_i)) }
 puts plans.sum { |plan| plan.id * max_geode(plan, 24) }
