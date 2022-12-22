@@ -30,15 +30,12 @@ input = {{ read_file("2022/21/input.txt").strip }}
 rules = [] of {String, String, String, Proc(Int64, Int64, Int64)}
 values = {} of String => Int64
 
-def build(op : String)
-  case op
-  when "+" then ->(l : Int64, r : Int64) { l + r }
-  when "-" then ->(l : Int64, r : Int64) { l - r }
-  when "*" then ->(l : Int64, r : Int64) { l * r }
-  when "/" then ->(l : Int64, r : Int64) { l // r }
-  else          raise "Unsupport"
-  end
-end
+OPS = {
+  "+" => ->(l : Int64, r : Int64) { l + r },
+  "-" => ->(l : Int64, r : Int64) { l - r },
+  "*" => ->(l : Int64, r : Int64) { l * r },
+  "/" => ->(l : Int64, r : Int64) { l // r },
+}
 
 input.each_line do |line|
   left, right = line.split(": ")
@@ -47,13 +44,13 @@ input.each_line do |line|
     values[left] = value
   else
     lhs, op, rhs = right.split(' ')
-    rules << {left, lhs, rhs, build(op)}
+    rules << {left, lhs, rhs, OPS[op]}
 
     case op
-    when "+" then rules << {lhs, left, rhs, build("-")} << {rhs, left, lhs, build("-")}
-    when "-" then rules << {lhs, left, rhs, build("+")} << {rhs, lhs, left, build("-")}
-    when "*" then rules << {lhs, left, rhs, build("/")} << {rhs, left, lhs, build("/")}
-    when "/" then rules << {lhs, left, rhs, build("*")} << {rhs, lhs, left, build("/")}
+    when "+" then rules << {lhs, left, rhs, OPS["-"]} << {rhs, left, lhs, OPS["-"]}
+    when "-" then rules << {lhs, left, rhs, OPS["+"]} << {rhs, lhs, left, OPS["-"]}
+    when "*" then rules << {lhs, left, rhs, OPS["/"]} << {rhs, left, lhs, OPS["/"]}
+    when "/" then rules << {lhs, left, rhs, OPS["*"]} << {rhs, lhs, left, OPS["/"]}
     end
   end
 end
