@@ -26,10 +26,20 @@ DIRS = { {0, 1}, {1, 0}, {0, -1}, {-1, 0} }
 
 wraps = {} of {Int32, Int32, Int32} => {Int32, Int32, Int32}
 
-#  top a -
-(50..99).each { |i| wraps[{0, i, 3}] = {149, i, 3} }
-# left a -
-(0..49).each { |i| wraps[{i, 50, 2}] = {i, 149, 2} }
+#########
+#   A B #
+#   C   #
+# E D   #
+# F     #
+#########
+
+50.times do |i|
+  wraps[{0, i + 50, 3}] = {149, i + 50, 3}  # A-3 => F-2
+  wraps[{i + 150, 0, 2}] = {i + 150, 49, 2} # F-2 => A-3
+
+  wraps[{i, 50, 2}] = {i, 149, 2} # A-2 => E-2
+
+end
 
 # top b -
 (100..149).each { |i| wraps[{0, i, 3}] = {49, i, 3} }
@@ -57,8 +67,6 @@ wraps = {} of {Int32, Int32, Int32} => {Int32, Int32, Int32}
 (150..199).each { |i| wraps[{i, 49, 0}] = {i, 0, 0} }
 # bottom f -
 (0..49).each { |i| wraps[{199, i, 1}] = {100, i, 1} }
-# left f
-(150..199).each { |i| wraps[{i, 0, 2}] = {i, 49, 2} }
 
 x = 0
 y = map[0].index!('.')
