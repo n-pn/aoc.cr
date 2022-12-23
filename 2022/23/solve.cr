@@ -1,28 +1,26 @@
-# input = {{ read_file("2022/23/test1.txt").strip }}
-input = {{ read_file("2022/23/input.txt").strip }}
-
-sides = {
+CHECKS = {
   { {-1, -1}, {-1, 0}, {-1, 1} }, # north
   { {1, -1}, {1, 0}, {1, 1} },    # south
-
   { {-1, -1}, {0, -1}, {1, -1} }, # west
   { {-1, 1}, {0, 1}, {1, 1} },    # east
 }
 
-elf_place = Set({Int32, Int32}).new
-input.each_line.with_index { |line, i| line.each_char.with_index { |v, j| elf_place << {i, j} if v == '#' } }
+# input = {{ read_file("2022/23/test1.txt").strip }}
+input = {{ read_file("2022/23/input.txt").strip }}
+
+state = Set({Int32, Int32}).new
+input.each_line.with_index { |line, i| line.each_char.with_index { |v, j| state << {i, j} if v == '#' } }
 
 proposes = Hash({Int32, Int32}, Array({Int32, Int32})).new
+propose = [] of {Int32, Int32}
 
-p1 = 0
-
-p2 = (0..).each do |i|
-  elf_place.each do |(x, y)|
-    propose = [] of {Int32, Int32}
+(0..).each do |i|
+  state.each do |(x, y)|
+    propose.clear
 
     4.times do |j|
-      array = sides[(i + j) % 4].map { |(dx, dy)| {x + dx, y + dy} }
-      propose << array[1] unless array.any?(&.in?(elf_place))
+      array = CHECKS[(i + j) % 4].map { |(dx, dy)| {x + dx, y + dy} }
+      propose << array[1] unless array.any?(&.in?(state))
     end
 
     next if propose.size == 0 || propose.size == 4
@@ -32,13 +30,13 @@ p2 = (0..).each do |i|
   end
 
   if i == 9
-    xmin = elf_place.min_of { |(x, _)| x }
-    xmax = elf_place.max_of { |(x, _)| x }
+    xmin = state.min_of { |(x, _)| x }
+    xmax = state.max_of { |(x, _)| x }
 
-    ymin = elf_place.min_of { |(_, y)| y }
-    ymax = elf_place.max_of { |(_, y)| y }
+    ymin = state.min_of { |(_, y)| y }
+    ymax = state.max_of { |(_, y)| y }
 
-    p1 = (xmax - xmin + 1) * (ymax - ymin + 1) - elf_place.size
+    puts (xmax - xmin + 1) * (ymax - ymin + 1) - state.size
   end
 
   moved = false
@@ -47,12 +45,13 @@ p2 = (0..).each do |i|
     next if elves.size > 1
     moved = true
 
-    elf_place << place
-    elf_place.delete(elves[0])
+    state << place
+    state.delete(elves[0])
   end
 
   proposes.clear
-  break i + 1 unless moved
-end
+  next if moved
 
-puts p1, p2
+  puts i + 1
+  break
+end
