@@ -54,7 +54,7 @@ cycle_data = nil
   max_height = {max_height, shape.max_of(&.// WIDTH) + 1}.max
   max_heights << max_height
 
-  hash = "#{push_id * 5 + index % 5}:#{top_rows(screen, max_height - 1)}"
+  hash = "#{push_id}:#{index % 5}:#{top_rows(screen, max_height - 1)}"
 
   if prev = state_memos[hash]?
     cycle_data = {prev[0], index - prev[0], max_height - prev[1]}
