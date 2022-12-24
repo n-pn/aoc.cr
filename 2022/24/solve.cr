@@ -31,10 +31,12 @@ def travel(blocks, xmax, ymax, start, goal, step : Int32 = 0)
 
       DIRS.each_value do |(dx, dy)|
         nx, ny = x + dx, y + dy
-        return step if {nx, ny} == goal
 
-        next unless nx.in?(0...xmax) && ny.in?(0...ymax)
-        next_queue << {nx, ny} unless blocked.includes?({nx, ny})
+        if 0 <= nx < xmax && 0 <= ny < ymax
+          next_queue << {nx, ny} unless blocked.includes?({nx, ny})
+        elsif {nx, ny} == goal
+          return step
+        end
       end
     end
 
