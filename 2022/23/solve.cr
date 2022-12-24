@@ -8,11 +8,13 @@ CHECKS = {
 # input = {{ read_file("2022/23/test1.txt").strip }}
 input = {{ read_file("2022/23/input.txt").strip }}
 
-state = Set({Int32, Int32}).new
+alias Pix = Tuple(Int32, Int32)
+
+state = Set(Pix).new
 input.each_line.with_index { |line, i| line.each_char.with_index { |v, j| state << {i, j} if v == '#' } }
 
-proposes = Hash({Int32, Int32}, Array({Int32, Int32})).new
-propose = [] of {Int32, Int32}
+proposes = Hash(Pix, Array(Pix)).new { |h, k| h[k] = [] of Pix }
+propose = [] of Pix
 
 (0..).each do |i|
   state.each do |(x, y)|
@@ -23,20 +25,7 @@ propose = [] of {Int32, Int32}
       propose << array[1] unless array.any?(&.in?(state))
     end
 
-    next if propose.size == 0 || propose.size == 4
-
-    proposes[propose[0]] ||= [] of {Int32, Int32}
-    proposes[propose[0]] << {x, y}
-  end
-
-  if i == 9
-    xmin = state.min_of { |(x, _)| x }
-    xmax = state.max_of { |(x, _)| x }
-
-    ymin = state.min_of { |(_, y)| y }
-    ymax = state.max_of { |(_, y)| y }
-
-    puts (xmax - xmin + 1) * (ymax - ymin + 1) - state.size
+    proposes[propose[0]] << {x, y} if propose.size.in?(1, 2, 3)
   end
 
   moved = false
@@ -47,6 +36,16 @@ propose = [] of {Int32, Int32}
 
     state << place
     state.delete(elves[0])
+  end
+
+  if i == 9
+    xmin = state.min_of { |(x, _)| x }
+    xmax = state.max_of { |(x, _)| x }
+
+    ymin = state.min_of { |(_, y)| y }
+    ymax = state.max_of { |(_, y)| y }
+
+    puts (xmax - xmin + 1) * (ymax - ymin + 1) - state.size
   end
 
   proposes.clear
