@@ -62,10 +62,8 @@ def travel(states, xmax, ymax, start, goal, step : Int32 = 0)
   raise "path not found!"
 end
 
-start, goal, step = {-1, 0}, {xmax, ymax - 1}, 0
+start, goal = {-1, 0}, {xmax, ymax - 1}
+routes = { {start, goal}, {goal, start}, {start, goal} }
 
-steps = { {start, goal}, {goal, start}, {start, goal} }.map do |(start, goal)|
-  step = travel(states, xmax, ymax, start, goal, step)
-end
-
-puts steps[0], steps[2]
+steps = routes.accumulate(0) { |step, (start, goal)| travel(states, xmax, ymax, start, goal, step) }
+puts steps[1], steps[3]
