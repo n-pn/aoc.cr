@@ -6,9 +6,6 @@ DIRS = {'v' => {1, 0}, '>' => {0, 1}, '^' => {-1, 0}, '<' => {0, -1}}
 xmax = input.size - 2
 ymax = input[0].size - 2
 
-alias Pair = Tuple(Int32, Int32)
-alias State = Array({Int32, Int32, Int32, Int32})
-
 blocks = [] of {Int32, Int32, Int32, Int32}
 
 input.each_with_index do |line, x|
@@ -18,7 +15,7 @@ input.each_with_index do |line, x|
 end
 
 def travel(blocks, xmax, ymax, start, goal, step : Int32 = 0)
-  queue = [start].to_set
+  queue = Set.new([start])
   next_queue = Set({Int32, Int32}).new
 
   while !queue.empty?
