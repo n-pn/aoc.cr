@@ -39,11 +39,8 @@ propose = [] of Pix
   end
 
   if i == 9
-    xmin = state.min_of { |(x, _)| x }
-    xmax = state.max_of { |(x, _)| x }
-
-    ymin = state.min_of { |(_, y)| y }
-    ymax = state.max_of { |(_, y)| y }
+    xmin, xmax = state.minmax_of(&.[0])
+    ymin, ymax = state.minmax_of(&.[1])
 
     puts (xmax - xmin + 1) * (ymax - ymin + 1) - state.size
   end
