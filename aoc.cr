@@ -28,7 +28,7 @@ class AOC
   private def read_input(ipath : String)
     File.read(ipath)
   rescue
-    `./bin/cli input -y #{@year} -d #{@day}`
+    `./bin/cli f -y #{@year} -d #{@day}`
     File.read(ipath)
   end
 end

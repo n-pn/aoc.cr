@@ -9,7 +9,7 @@ def headers
   headers
 end
 
-def init(out_dir : String)
+def touch(out_dir : String)
   Dir.mkdir_p(out_dir)
   out_file = "#{out_dir}/solve.cr"
   return if File.file?(out_file)
@@ -29,15 +29,16 @@ def fetch(year : Int32, day : Int32, out_dir : String)
   puts
 
   link = "https://adventofcode.com/#{year}/day/#{day}/input"
-  body = HTTP::Client.get(link, headers: headers).body
+  body = HTTP::Client.get(link, headers: headers, &.body_io.gets_to_end)
 
   file = "#{out_dir}/input.txt"
+  Dir.mkdir_p(File.dirname(file))
   File.write(file, body)
 
   puts body
 end
 
-def submit(year : Int32, day : Int32, answer : String, level : String)
+def answer(year : Int32, day : Int32, answer : String, level : String)
   puts "Answering part #{level} of day #{day} year #{year}: #{answer}"
 
   form = {"level" => level, "answer" => answer}
@@ -64,11 +65,7 @@ end
 out_dir = "#{year}/#{day.to_s.rjust(2, '0')}"
 
 case args[0]
-when "init"
-  init(out_dir)
-when "input"
-  fetch(year, day, out_dir)
-else
-  args.shift if args[0].in?("submit", "answer")
-  submit(year, day, args[0], args.fetch(1, "1"))
+when "g" then touch(out_dir)
+when "f" then fetch(year, day, out_dir)
+when "a" then answer(year, day, args[1], args[2])
 end
