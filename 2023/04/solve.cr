@@ -1,4 +1,4 @@
-input = File.read("#{__DIR__}/input.txt").strip.lines
+input = File.read_lines("#{__DIR__}/input.txt")
 
 test1 = <<-TXT.lines
 Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53
@@ -10,18 +10,15 @@ Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11
 TXT
 
 def parse(text)
-  text.map(&.split(/[:|]/).tap(&.shift).map(&.split.to_set).reduce { |a, b| a & b }.size)
+  text.map(&.split(/[:|]/).try { |x| x[1].split & x[2].split }.size)
 end
 
 def part1(data)
-  data.sum(0) { |x| x > 0 ? 2 ** (x - 1) : 0 }
+  data.sum { |x| 1 << x - 1 }
 end
 
 def part2(data)
-  cards = Array.new(data.size, 1)
-  # cards.each_with_index { |c, i| data[i].times { |j| cards[i + j + 1] += c } }
-  data.each_with_index { |c, i| 1.upto(c) { |j| cards[i + j] += cards[i] } }
-  cards.first(data.size).sum
+  data.map { 1 }.tap { |a| data.each_with_index { |c, i| 1.upto(c) { |j| a[i + j] += a[i] } } }.sum
 end
 
 puts part1(parse(test1)) == 13
