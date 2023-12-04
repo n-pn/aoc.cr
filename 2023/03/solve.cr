@@ -1,20 +1,30 @@
-input = File.read("2023/03/test.txt").strip.lines
-input = File.read("2023/03/input.txt").strip.lines
+input = File.read("#{__DIR__}/input.txt").strip.lines
+
+test0 = <<-TXT.lines
+467..114..
+...*......
+..35..633.
+......#...
+617*......
+.....+.58.
+..592.....
+......755.
+...$.*....
+.664.598..
+TXT
 
 input = input.map { |x| ".#{x}.".chars }
-
 input.unshift Array.new(input.first.size, '.')
 input.push Array.new(input.first.size, '.')
 
 def symbol?(char : Char)
-  return false if char.in?('0'..'9')
-  char != '.'
+  !(char.number? || char == '.')
 end
 
 def part_number?(input, l_id, lower, upper)
   return true if input[l_id - 1][lower..upper].any? { |x| symbol?(x) }
   return true if input[l_id + 1][lower..upper].any? { |x| symbol?(x) }
-  symbol?(input[l_id][lower]) || symbol?(input[l_id][upper])
+  input[l_id][lower..upper].any? { |x| symbol?(x) }
 end
 
 def gear?(char : Char)
@@ -34,7 +44,6 @@ def gear_number?(input, l_id, lower, upper)
 end
 
 p1 = 0
-p2 = 0
 
 gears = Hash({Int32, Int32}, Array(Int32)).new do |h, k|
   h[k] = [] of Int32
@@ -49,13 +58,13 @@ lmax = input.first.size - 1
 
   i = 0
   while i < lmax
-    unless line[i].in?('0'..'9')
+    unless line[i].number?
       i += 1
       next
     end
 
     j = i + 1
-    while line[j].in?('0'..'9')
+    while line[j].number?
       j += 1
     end
 
@@ -73,5 +82,4 @@ lmax = input.first.size - 1
 end
 
 puts p1
-
-puts gears.values.select(&.size.== 2).sum { |x| x.product }
+puts gears.values.select(&.size.== 2).sum(&.product)

@@ -17,11 +17,22 @@ def touch(out_dir : String)
   puts "Init file for #{out_dir}".colorize.green
 
   File.write(out_file, <<-DATA)
-    require "../../aoc"
+  input = File.read("#{__DIR__}/input.txt").strip.lines
 
-    Ctx = AOC.new __DIR__
-    input = Ctx.input.lines.map(&.to_i)
-    DATA
+  test0 = <<-TXT.lines
+
+  TXT
+  test1 = <<-TXT.lines
+
+  TXT
+
+  def part1(input)
+
+  end
+
+  puts part1(test0) == 0
+  puts part1(input)
+  DATA
 end
 
 def fetch(year : Int32, day : Int32, out_dir : String)
