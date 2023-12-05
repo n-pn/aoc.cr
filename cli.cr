@@ -17,7 +17,7 @@ def touch(out_dir : String)
   puts "Init file for #{out_dir}".colorize.green
 
   File.write(out_file, <<-DATA)
-  input = File.read("#{__DIR__}/input.txt").strip.lines
+  input = File.read("\#{__DIR__}/input.txt").strip.lines
 
   test0 = <<-TXT.lines
 
