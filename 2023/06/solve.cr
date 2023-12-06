@@ -6,19 +6,17 @@ Distance:  9  40  200
 TXT
 
 def solve(time, dist)
-  (0_i64..time).count { |i| i &* (time &- i) > dist }
+  (0_i64..time).count { |i| i * (time - i) > dist }
 end
 
 def part1(text)
-  times = text[0].scan(/\d+/).map(&.[0].to_i64)
-  dists = text[1].scan(/\d+/).map(&.[0].to_i64)
-  times.zip(dists).product { |time, dist| solve(time, dist) }
+  times, dists = text.map(&.split[1..])
+  times.zip(dists).product { |time, dist| solve(time.to_i, dist.to_i) }
 end
 
 def part2(text)
-  time = text[0].scan(/\d+/).map(&.[0]).join.to_i64
-  dist = text[1].scan(/\d+/).map(&.[0]).join.to_i64
-  solve(time, dist)
+  time, dist = text.map(&.split[1..].join)
+  solve(time.to_i64, dist.to_i64)
 end
 
 puts part1(test1) == 288
