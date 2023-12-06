@@ -6,12 +6,15 @@ Distance:  9  40  200
 TXT
 
 def solve(time, dist)
-  (0_i64..time).count { |i| i * (time - i) > dist }
+  # time.times.count { |i| i * (time - i) > dist }
+  max = (time + Math.sqrt(time ** 2 - dist * 4)) / 2
+  min = (time - Math.sqrt(time ** 2 - dist * 4)) / 2
+  (max.ceil - min.floor - 1).to_i64
 end
 
 def part1(text)
   times, dists = text.map(&.split[1..])
-  times.zip(dists).product { |time, dist| solve(time.to_i, dist.to_i) }
+  times.zip(dists).product { |time, dist| solve(time.to_i64, dist.to_i64) }
 end
 
 def part2(text)
