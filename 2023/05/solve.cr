@@ -37,21 +37,21 @@ humidity-to-location map:
 TXT
 
 def parse(input)
-  seeds, *maps = input.split(/\n\n/)
+  seeds, *maps_list_input = input.split(/\n\n/)
   seeds = seeds.split.tap(&.shift).map(&.to_i64)
 
-  range_list = [] of Array({Int64, Int64, Int64})
+  maps_list = [] of Array({Int64, Int64, Int64})
 
-  maps.each do |map|
+  maps_list_input.each do |map|
     map_data = map.lines.tap(&.shift).map(&.split.map(&.to_i64))
-    range_list << map_data.map { |a| {a[1], a[1] + a[2] - 1, a[0] - a[1]} }
+    maps_list << map_data.map { |a| {a[1], a[1] + a[2] - 1, a[0] - a[1]} }
   end
 
-  {seeds, range_list}
+  {seeds, maps_list}
 end
 
-def solve(init_range, range_list)
-  range_list.each do |ranges|
+def solve(init_range, maps_list)
+  maps_list.each do |ranges|
     next_range = [] of {Int64, Int64}
 
     init_range.each do |ia, ib|
