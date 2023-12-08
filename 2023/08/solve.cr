@@ -27,29 +27,26 @@ TXT
 
 def parse(text)
   ins, map = text.split("\n\n")
-  ins = ins.chars.map { |c| c == 'L' ? 0 : 1 }
-  map = map.lines.to_h { |l| a, b, c = l.scan(/\w+/).map(&.[0]); {a, {b, c}} }
+  ins = ins.chars.map(&.== 'L')
+  map = map.lines.to_h { |l| a, b, c = l.split(/\W+/); {a, {b, c}} }
   {ins, map}
 end
 
 def solve(ins, map, node)
-  step = 0_i64
-
-  ins.cycle do |i|
-    node = map[node][i]
-    step += 1
-    break step if yield node
+  (1_i64..).find! do
+    node = map[node][ins.next ? 0 : 1]
+    yield node
   end
 end
 
 def part1(text)
   ins, map = parse(text)
-  solve(ins, map, "AAA", &.== "ZZZ")
+  solve(ins.cycle, map, "AAA", &.== "ZZZ")
 end
 
 def part2(text)
   ins, map = parse(text)
-  map.each_key.select(&.ends_with?('A')).map { |n| solve(ins, map, n, &.ends_with?('Z')) }.reduce { |x, y| x.lcm(y) }
+  map.keys.select(&.ends_with?('A')).map { |n| solve(ins.cycle, map, n, &.ends_with?('Z')) }.reduce { |x, y| x.lcm(y) }
 end
 
 puts "part 1: #{part1(input)}" if part1(test1) == 2
