@@ -30,11 +30,13 @@ def answer(year : Int32, day : Int32, answer : String, level : Int32 | String)
 
   form = {"level" => level.to_s, "answer" => answer}
   link = "https://adventofcode.com/#{year}/day/#{day.to_i}/answer"
-
   body = HTTP::Client.post(link, headers: HEADERS, form: form).body
 
-  found = body.match(/<article>(.+)<\/article>/)
-  puts found.not_nil![1]
+  if match = body.match(/<article>(.+)<\/article>/)
+    puts match.colorize.red
+  else
+    puts "done".colorize.yellow
+  end
 end
 
 current = Time.local
