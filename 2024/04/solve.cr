@@ -1,24 +1,16 @@
-require "colorize"
-
-def part1_1(input : Array(Array(Char)))
-  input.sum { |x| x.join.scan(/XMAS/).size + x.join.scan(/SAMX/).size }
+def part1_1(inp : Array(Array(Char)))
+  inp.sum(&.each_cons(4).count(&.join.in?("XMAS", "SAMX")))
 end
 
-def part1_2(input : Array(Array(Char)))
-  chars = Array(Array(Char)).new(input.size * 2) { |x| [] of Char }
-  input.size.times { |i| input.first.size.times { |j| chars[i + j] << input[i][j] } }
-  part1_1(chars)
+def part1_2(inp : Array(Array(Char)), max = inp.size * 2)
+  part1_1 (0..max).map { |s| (0..max).compact_map { |x| inp[x]?.try(&.[s - x]?) if x <= s } }
 end
 
-def part2(input)
+def part2(inp, len = inp.size - 3)
   map = { {0, 0} => 'M', {0, 2} => 'S', {1, 1} => 'A', {2, 0} => 'M', {2, 2} => 'S' }
-  0.upto(input.size - 3).sum do |i|
-    0.upto(input.first.size - 3).sum do |j|
-      map.all? { |(a, b), m| input[i + a][j + b] == m } ? 1 : 0
-    end
-  end
+  0.upto(len).sum { |i| 0.upto(len).count { |j| map.all? { |(a, b), m| inp[i + a][j + b] == m } } }
 end
 
-input = File.read("#{__DIR__}/input.txt").strip.lines.map(&.chars)
-puts part1_1(input) + part1_1(input.transpose) + part1_2(input) + part1_2(input.map(&.reverse))
-puts part2(input) + part2(input.map(&.reverse)) + part2(input.transpose) + part2(input.transpose.map(&.reverse))
+inp = File.read("#{__DIR__}/input.txt").strip.lines.map(&.chars)
+puts part1_1(inp) + part1_1(inp.transpose) + part1_2(inp) + part1_2(inp.reverse)
+puts part2(inp) + part2(inp.map(&.reverse)) + part2(inp.transpose) + part2(inp.transpose.map(&.reverse))
