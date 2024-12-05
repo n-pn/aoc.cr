@@ -1,8 +1,8 @@
-def part1_1(inp : Array(Array(Char)))
+def part1_1(inp)
   inp.sum(&.each_cons(4).count(&.join.in?("XMAS", "SAMX")))
 end
 
-def part1_2(inp : Array(Array(Char)), max = inp.size * 2)
+def part1_2(inp, max = inp.size * 2)
   part1_1 (0..max).map { |s| (0..max).compact_map { |x| inp[x]?.try(&.[s - x]?) if x <= s } }
 end
 
