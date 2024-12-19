@@ -26,9 +26,8 @@ a, b, c, *program = input.scan(/\d+/m).map(&.[0].to_i64)
 
 puts solve(program, a, b, c).join(',')
 
-a = 1_i64
-puts(loop do
+puts (1_i64..).reduce do |a|
   output = solve(program, a, b, c)
   break a if output == program
-  a = output == program.last(output.size) ? a &* 8 : a &+ 1
-end)
+  output == program.last(output.size) ? a &* 8 : a &+ 1
+end

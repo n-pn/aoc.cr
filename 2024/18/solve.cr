@@ -1,42 +1,17 @@
-MOVES = { {0, 1}, {1, 0}, {0, -1}, {-1, 0} }
-
 def travel(map, max)
-  queue = [{0, 0}]
-
-  (1..).each do |i|
-    qnext = [] of {Int32, Int32}
-
-    queue.each do |a, b|
-      MOVES.each do |x, y|
-        c, d = a + x, b + y
-        return i if c == max && d == max
-        next unless c.in?(0..max) && d.in?(0..max) && !map.includes?({c, d})
-        map << {c, d}
-        qnext << {c, d}
+  (1..).reduce([{0, 0}]) do |queue, i|
+    break -1 if queue.empty?
+    { {0, 1}, {1, 0}, {0, -1}, {-1, 0} }.flat_map do |x, y|
+      queue.compact_map do |q|
+        n = {q[0] + x, q[1] + y}
+        return i if n == {max, max}
+        n.tap { |x| map << x } if n.all?(&.in?(0..max)) && !map.includes?(n)
       end
     end
-
-    return -1 if qnext.empty?
-    queue = qnext
   end
-
-  -1
 end
 
-input = File.read("#{__DIR__}/input.txt").strip.lines
+input = File.read("#{__DIR__}/input.txt").strip.lines.map(&.split(',').try { |x| {x[0].to_i, x[1].to_i} })
+part2 = (1..input.size).bsearch { |i| travel(input.first(i).to_set, 70) == -1 } || 1
 
-map = Set({Int32, Int32}).new
-map << {0, 0}
-
-input.first(1024).each do |line|
-  a, b = line.split(',')
-  map << {a.to_i, b.to_i}
-end
-
-puts travel(map.clone, 70)
-
-puts(input[1024..].each do |line|
-  a, b = line.split(',')
-  map << {a.to_i, b.to_i}
-  break line if travel(map.clone, 70) == -1
-end)
+puts travel(input.first(1024).to_set, 70), input[part2 - 1].join(',')
