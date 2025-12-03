@@ -1,5 +1,3 @@
-require "colorize"
-
 input = File.read("#{__DIR__}/input.txt").strip.lines
 
 test0 = <<-TXT.strip.lines
@@ -13,10 +11,6 @@ L1
 L99
 R14
 L82
-TXT
-
-test1 = <<-TXT.strip.lines
-
 TXT
 
 def part1(input : Array(String), start = 50)

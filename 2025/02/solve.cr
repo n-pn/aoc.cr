@@ -1,5 +1,3 @@
-require "colorize"
-
 input = File.read("#{__DIR__}/input.txt").strip
 
 def calc(input : String, regex : Regex)
